@@ -121,7 +121,7 @@ func main() {
             time_left := working_week - time_worked
             echoAppend(week_file,"Worked ", hourMin(time_worked), " of ", hourMin(working_week),
             " leaving ", hourMin(time_left), "\n")
-            echoAppend(week_file,"-------------------------------------")
+            echoAppend(week_file,"------------------------------------")
         }
 
         // Taking input from user
