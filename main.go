@@ -14,6 +14,7 @@ import (
     "path"
     "time"
     "strconv"
+    "strings"
 )
 
 const timesheet_dir = "/Users/joseph.grimer/timesheets"
@@ -62,6 +63,29 @@ func main() {
     timecard = append(timecard, new_row)
     // */
     target_file := path.Join(timesheet_dir, week_diff)
+
+    if _, err := os.Stat(target_file); err == nil {
+        fmt.Println("Week already exists. Thus I begin to parse")
+        week_ro, err := os.ReadFile(target_file) // dump to bytes
+        if err != nil {
+            log.Fatal(err)
+        }
+        sweek_ro := string(week_ro)
+        fmt.Printf(sweek_ro)
+
+        s := strings.Split(sweek_ro, "------------------------------------")
+        fmt.Println("next last is:")
+        fmt.Println(s[len(s)-2])
+        s2 := strings.Split(s[len(s)-2], "\n")
+        fmt.Println("day 1 is")
+        fmt.Println(s2[1])
+        if strings.HasPrefix(s2[1], "Monday") {
+
+        }
+
+        return
+    }
+
     week_file, err := os.OpenFile(target_file, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0660)
     if err != nil {
         log.Fatal(err)
@@ -77,7 +101,7 @@ func main() {
         } else {
             timecard[len(timecard)-1] = append(timecard[len(timecard)-1], current_time)
         }
-        
+
         first_day := true
         var last_period_start time.Time
         time_worked := time.Duration(0)
@@ -121,7 +145,7 @@ func main() {
             time_left := working_week - time_worked
             echoAppend(week_file,"Worked ", hourMin(time_worked), " of ", hourMin(working_week),
             " leaving ", hourMin(time_left), "\n")
-            echoAppend(week_file,"------------------------------------")
+            echoAppend(week_file,"-----------------------------------")
         }
 
         // Taking input from user
